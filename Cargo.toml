@@ -16,6 +16,7 @@ proc-macro2 = "1.0.76"
 quote = "1.0.35"
 syn = "2.0.48"
 automod = "1.0.14"
+either = "1.9.0"
 
 [workspace]
 resolver = "2" # Important! wgpu/Bevy needs this!

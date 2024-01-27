@@ -1,30 +1,19 @@
-use bevy::prelude::{
-    Bundle,
-    SpriteBundle,
-    Transform,
-    Vec2,
-    Sprite,
-    default,
+use bevy::{
+    ecs::bundle::Bundle,
+    math::Vec2,
+    prelude::default,
+    sprite::{Sprite, SpriteBundle},
+    transform::components::Transform
 };
 
-use crate::{
-    components::Collider,
-    constants::wall::{
-        LEFT_WALL,
-        RIGHT_WALL,
-        BOTTOM_WALL,
-        TOP_WALL,
-        WALL_THICKNESS,
-        WALL_COLOR,
-    },
-};
+use crate::{components, constants};
 
 #[derive(Bundle)]
 pub struct WallBundle {
     // You can nest bundles inside of other bundles like this
     // Allowing you to compose their functionality
     pub sprite_bundle: SpriteBundle,
-    pub collider: Collider,
+    pub collider: components::Collider,
 }
 
 /// Which side of the arena is this wall located on?
@@ -38,26 +27,26 @@ pub enum WallLocation {
 impl WallLocation {
     fn position(&self) -> Vec2 {
         match self {
-            WallLocation::Left => Vec2::new(LEFT_WALL, 0.),
-            WallLocation::Right => Vec2::new(RIGHT_WALL, 0.),
-            WallLocation::Bottom => Vec2::new(0., BOTTOM_WALL),
-            WallLocation::Top => Vec2::new(0., TOP_WALL),
+            WallLocation::Left => Vec2::new(constants::wall::LEFT_WALL, 0.),
+            WallLocation::Right => Vec2::new(constants::wall::RIGHT_WALL, 0.),
+            WallLocation::Bottom => Vec2::new(0., constants::wall::BOTTOM_WALL),
+            WallLocation::Top => Vec2::new(0., constants::wall::TOP_WALL),
         }
     }
 
     fn size(&self) -> Vec2 {
-        let arena_height = TOP_WALL - BOTTOM_WALL;
-        let arena_width = RIGHT_WALL - LEFT_WALL;
+        let arena_height = constants::wall::TOP_WALL - constants::wall::BOTTOM_WALL;
+        let arena_width = constants::wall::RIGHT_WALL - constants::wall::LEFT_WALL;
         // Make sure we haven't messed up our constants
         assert!(arena_height > 0.0);
         assert!(arena_width > 0.0);
 
         match self {
             WallLocation::Left | WallLocation::Right => {
-                Vec2::new(WALL_THICKNESS, arena_height + WALL_THICKNESS)
+                Vec2::new(constants::wall::WALL_THICKNESS, arena_height + constants::wall::WALL_THICKNESS)
             }
             WallLocation::Bottom | WallLocation::Top => {
-                Vec2::new(arena_width + WALL_THICKNESS, WALL_THICKNESS)
+                Vec2::new(arena_width + constants::wall::WALL_THICKNESS, constants::wall::WALL_THICKNESS)
             }
         }
     }
@@ -80,12 +69,12 @@ impl WallBundle {
                     ..default()
                 },
                 sprite: Sprite {
-                    color: WALL_COLOR,
+                    color: constants::wall::WALL_COLOR,
                     ..default()
                 },
                 ..default()
             },
-            collider: Collider,
+            collider: components::Collider,
         }
     }
 }
